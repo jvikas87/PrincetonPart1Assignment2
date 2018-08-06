@@ -57,7 +57,16 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 		items[random] = items[size - 1];
 		items[size - 1] = null;
 		size--;
+		if (size != 0 && size == items.length / 4) {
+			half();
+		}
 		return ans; // remove and return a random item
+	}
+
+	private void half() {
+		Item[] newArray = (Item[]) new Object[size * 2];
+		System.arraycopy(items, 0, newArray, 0, size * 2);
+		items = newArray;
 	}
 
 	public Item sample() {
