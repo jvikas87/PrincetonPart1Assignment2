@@ -3,13 +3,13 @@ import java.util.NoSuchElementException;
 
 import edu.princeton.cs.algs4.StdRandom;
 
-public class RandomizedQueueAlternate<Item> implements Iterable<Item> {
+public class RandomizedQueue<Item> implements Iterable<Item> {
 
 	private Item[] items;
 
 	private int size;
 
-	public RandomizedQueueAlternate() {
+	public RandomizedQueue() {
 		items = (Item[]) new Object[1];
 		// construct an empty randomized queue
 	}
@@ -52,17 +52,20 @@ public class RandomizedQueueAlternate<Item> implements Iterable<Item> {
 		if (size == 0) {
 			throw new NoSuchElementException();
 		}
+		int random = StdRandom.uniform(size);
+		Item ans = items[random];
+		items[random] = items[size - 1];
+		items[size - 1] = null;
 		size--;
-		Item poppedItem = items[size];
-		items[size] = null;
-		return poppedItem; // remove and return a random item
+		return ans; // remove and return a random item
 	}
 
 	public Item sample() {
 		if (size == 0) {
 			throw new NoSuchElementException();
 		}
-		return items[size - 1]; // remove and return a random item
+		return items[StdRandom.uniform(size)]; // remove and return a random
+												// item
 	}
 
 	public Iterator<Item> iterator() {
@@ -107,15 +110,3 @@ public class RandomizedQueueAlternate<Item> implements Iterable<Item> {
 		}
 	}
 }
-/Alternate Code for deque
-public Item dequeue() {
-		if (size == 0) {
-			throw new NoSuchElementException();
-		}
-		int random = StdRandom.uniform(size);
-		Item ans = items[random];
-		items[random] = items[size - 1];
-		items[size - 1] = null;
-		size--;
-		return ans; // remove and return a random item
-	}
