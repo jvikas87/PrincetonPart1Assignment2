@@ -107,3 +107,15 @@ public class RandomizedQueueAlternate<Item> implements Iterable<Item> {
 		}
 	}
 }
+/Alternate Code for deque
+public Item dequeue() {
+		if (size == 0) {
+			throw new NoSuchElementException();
+		}
+		int random = StdRandom.uniform(size);
+		Item ans = items[random];
+		items[random] = items[size - 1];
+		items[size - 1] = null;
+		size--;
+		return ans; // remove and return a random item
+	}
