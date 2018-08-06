@@ -1,0 +1,109 @@
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+import edu.princeton.cs.algs4.StdRandom;
+
+public class RandomizedQueueAlternate<Item> implements Iterable<Item> {
+
+	private Item[] items;
+
+	private int size;
+
+	public RandomizedQueueAlternate() {
+		items = (Item[]) new Object[1];
+		// construct an empty randomized queue
+	}
+
+	public boolean isEmpty() {
+		return size == 0;
+		// is the randomized queue empty?
+	}
+
+	public int size() {
+		return size;
+		// return the number of items on the randomized queue
+	}
+
+	public void enqueue(Item item) { // add the item
+		if (item == null) {
+			throw new IllegalArgumentException();
+		}
+		if (items.length == size) {
+			resize();
+		}
+		items[size++] = item;
+		int random = StdRandom.uniform(size);
+		Item temp = items[random];
+		items[size - 1] = temp;
+		items[random] = item;
+	}
+
+	private void resize() {
+		int twice = size * 2;
+		if (twice == 0) {
+			twice = 1;
+		}
+		Item[] newArray = (Item[]) new Object[twice];
+		System.arraycopy(items, 0, newArray, 0, size);
+		items = newArray;
+	}
+
+	public Item dequeue() {
+		if (size == 0) {
+			throw new NoSuchElementException();
+		}
+		size--;
+		Item poppedItem = items[size];
+		items[size] = null;
+		return poppedItem; // remove and return a random item
+	}
+
+	public Item sample() {
+		if (size == 0) {
+			throw new NoSuchElementException();
+		}
+		return items[size - 1]; // remove and return a random item
+	}
+
+	public Iterator<Item> iterator() {
+		return new RandomizedQueueIterator(); // return an independent iterator
+												// over items in random order
+	}
+
+	public static void main(String[] args) {
+	} // unit testing (optional)
+
+	private class RandomizedQueueIterator implements Iterator<Item> {
+
+		private int iteratorIndex;
+
+		private int iteratorSize;
+
+		private Item[] array;
+
+		public RandomizedQueueIterator() {
+			this.iteratorSize = size;
+			array = (Item[]) new Object[size];
+			System.arraycopy(items, 0, array, 0, size);
+			StdRandom.shuffle(array);
+		}
+
+		@Override
+		public boolean hasNext() {
+			return iteratorIndex < iteratorSize;
+		}
+
+		@Override
+		public Item next() {
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			}
+			return array[iteratorIndex++];
+		}
+
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+	}
+}
